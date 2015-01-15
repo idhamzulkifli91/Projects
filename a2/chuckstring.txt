@@ -1,0 +1,25 @@
+{
+    "dateOfBirth": "1945-01-01",
+    "firstName": "Chuck",
+    "lastName": "Norris",    
+    "healthProfile": {
+        "measures": [
+            {
+                "date": "2014-10-10",
+                "value": 78.9,
+                "measureType": {
+                   
+                    "description": "weight"
+                }
+            },
+            {
+                "date": "2014-02-02",
+                "value": 172,
+                "measureType": {
+                  
+                    "description": "height"
+                }
+            }
+        ]
+    }
+}

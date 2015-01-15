@@ -1,0 +1,11 @@
+Todo:
+1 use Eclipse
+2 create new web dynamic project with the location "a2"
+3 project->configure->convert to jpa project..
+4 Add ivy library
+-----------
+run server: App.java -> run as Java Application
+-----------
+run client: ClientApp.java -> run as Java Application 
+-please be aware that my client is tested only for JSON
+-if you run with my server just ignore "Please give the BASE_URL!" and press Enter, otherwise give the URL of the server
