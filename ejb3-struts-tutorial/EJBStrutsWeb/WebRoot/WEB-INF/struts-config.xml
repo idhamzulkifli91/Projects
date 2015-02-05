@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+  <data-sources />
+  <form-beans />
+  <global-exceptions />
+  <global-forwards />
+  <action-mappings >
+    <action
+      path="/listBooks"
+      type="de.laliluna.library.struts.action.ListBooksAction"
+      validate="false">
+      <forward name="success" path="/jsp/listBooks.jsp" />
+    </action>
+    <action forward="/jsp/welcome.jsp" path="/welcome" unknown="true" />
+    <action
+      path="/createSampleData"
+      type="de.laliluna.library.struts.action.CreateSampleDataAction"
+      validate="false">
+      <forward
+        name="success"
+        path="/welcome.do"
+        redirect="true" />
+    </action>
+    <action
+      parameter="action"
+      path="/manageCart"
+      type="de.laliluna.library.struts.action.ManageCartAction"
+      validate="false">
+      <forward name="success" path="/jsp/checkout.jsp" />
+      <forward name="self" path="/jsp/cart.jsp" />
+    </action>
+    <action
+      path="/logout"
+      type="de.laliluna.library.struts.action.LogoutAction"
+      validate="false">
+      <forward name="success" path="/jsp/welcome.jsp" />
+    </action>
+    <action
+     parameter="action"
+      path="/selectCustomer"
+      type="de.laliluna.library.struts.action.SelectCustomerAction"
+      validate="false">
+      <forward
+      name="success"
+      path="/manageCustomer.do"
+      redirect="true" />
+      <forward name="self" path="/jsp/selectCustomer.jsp" />
+      
+    </action>
+    <action
+     parameter="action"
+      path="/manageCustomer"
+      type="de.laliluna.library.struts.action.ManageCustomerAction"
+      validate="false">
+      <forward name="success" path="/jsp/manageCustomer.jsp" />
+    </action>
+
+  </action-mappings>
+
+  <message-resources parameter="de.laliluna.library.struts.ApplicationResources" />
+</struts-config>
+

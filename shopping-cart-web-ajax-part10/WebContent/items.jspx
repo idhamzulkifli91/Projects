@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" 
+		  xmlns:ui="http://java.sun.com/jsf/facelets"
+  		  xmlns:h="http://java.sun.com/jsf/html"
+  		  xmlns:f="http://java.sun.com/jsf/core" 
+		  xmlns:a4j="http://richfaces.org/a4j"
+		  xmlns:rich="http://richfaces.org/rich"
+		  version="2.0">
+<ui:composition template="/template.jspx">
+	<ui:define name="body">
+		<h:outputText id="headingOutTxt" value="#{msg.items_txt_heading}"
+			styleClass="headingOutputText" />
+		<a4j:form id="itemListFrm">
+			<rich:dataTable id="itemsTbl" var="items" value="#{pc_Items.items}"
+				binding="#{pc_Items.itemsTable}" styleClass="dataTable"
+				columnClasses="dataTableCol1" rowClasses="dataTableRow1"
+				headerClass="dataTableHeader">
+				<rich:column id="nameCol">
+					<f:facet name="header">
+						<h:outputText id="nameHeaderOutTxt"
+							value="#{msg.items_txt_name_col_header}" />
+					</f:facet>
+					<h:outputText id="nameOutTxt" value="#{items.name}" />
+				</rich:column>
+				<rich:column id="descriptionCol">
+					<f:facet name="header">
+						<h:outputText id="descriptionHeaderOutTxt"
+							value="#{msg.items_txt_description_col_header}" />
+					</f:facet>
+					<h:outputText id="descriptionOutTxt" value="#{items.description}" />
+				</rich:column>
+				<rich:column id="priceCol">
+					<f:facet name="header">
+						<h:outputText id="priceHeaderOutTxt"
+							value="#{msg.items_txt_price_col_header}" />
+					</f:facet>
+					<h:outputText id="priceOutTxt" value="#{items.price}">
+						<f:convertNumber pattern="#{msg.currency_pattern}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column id="addActionCol">
+					<a4j:commandLink id="buyLnk" value="#{msg.items_lnk_buy}"
+						action="#{pc_Items.addItemToBasket}" reRender="basketTbl" />
+				</rich:column>
+			</rich:dataTable>
+			<p />
+			<h:outputText id="basketOutTxt" value="#{msg.items_txt_basket}" />
+			<p />
+			<rich:dataTable id="basketTbl" var="basketItem" styleClass="dataTable"
+				columnClasses="dataTableCol1" rowClasses="dataTableRow1"
+				value="#{shoppingViewHelper.basket.basketItems}"
+				binding="#{pc_Items.basketTable}">
+				<rich:column id="basketItemCol">
+					<f:facet name="header">
+						<h:outputText id="basketTblHeaderOutTxt"
+							value="#{msg.items_txt_basket_item_col_header}" />
+					</f:facet>
+					<h:outputText id="basketItemOutTxt" value="#{basketItem.item.name}" />
+				</rich:column>
+				<rich:column id="basketItemQuantityCol">
+					<f:facet name="header">
+						<h:outputText id="basketTblQuantityOutTxt"
+							value="#{msg.items_txt_basket_quantity_col_header}" />
+					</f:facet>
+					<h:outputText id="basketItemQuantityOutTxt" value="#{basketItem.quantity}" />
+				</rich:column>
+				<rich:column id="basketItemPriceCol">
+					<f:facet name="header">
+						<h:outputText id="basketTblPriceOutTxt"
+							value="#{msg.items_txt_basket_price_col_header}" />
+					</f:facet>
+					<h:outputText id="basketItemPriceOutTxt" value="#{basketItem.price}">
+						<f:convertNumber pattern="#{msg.currency_pattern}" />
+					</h:outputText>
+				</rich:column>
+				<rich:column id="removeActionCol">
+					<a4j:commandLink id="removeLnk" value="#{msg.items_lnk_remove}"
+						action="#{pc_Items.removeItemFromBasket}" reRender="basketTbl" />
+				</rich:column>
+			</rich:dataTable>
+			<p />
+			<h:commandButton id="checkoutBtn" value="#{msg.btn_checkout}"
+				action="#{pc_Items.checkout}" />
+			<rich:messages errorClass="errorText" />	
+		</a4j:form>
+	</ui:define>
+</ui:composition>
+</jsp:root>

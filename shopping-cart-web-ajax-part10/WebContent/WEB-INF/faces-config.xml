@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+	<managed-bean>
+		<managed-bean-name>pc_Items</managed-bean-name>
+		<managed-bean-class>com.mydomain.shoppingcart.view.Items</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>shoppingViewHelper</property-name>
+			<value>#{shoppingViewHelper}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>pc_Checkout</managed-bean-name>
+		<managed-bean-class>com.mydomain.shoppingcart.view.Checkout</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>shoppingViewHelper</property-name>
+			<value>#{shoppingViewHelper}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>pc_Confirmation</managed-bean-name>
+		<managed-bean-class>com.mydomain.shoppingcart.view.Confirmation</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+			<property-name>shoppingViewHelper</property-name>
+			<value>#{shoppingViewHelper}</value>
+		</managed-property>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>shoppingViewHelper</managed-bean-name>
+		<managed-bean-class>com.mydomain.shoppingcart.view.ShoppingViewHelper</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+		<managed-property>
+			<property-name>shoppingManager</property-name>
+			<value>#{shoppingService}</value>
+		</managed-property>
+	</managed-bean>
+	<navigation-rule>
+		<navigation-case>
+			<from-outcome>checkout</from-outcome>
+			<to-view-id>/checkout.jspx</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>pay</from-outcome>
+			<to-view-id>/payment-processed.jspx</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>cancel</from-outcome>
+			<to-view-id>/items.jspx</to-view-id>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>continue</from-outcome>
+			<to-view-id>/items.jspx</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<application>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+</faces-config>

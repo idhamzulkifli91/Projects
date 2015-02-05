@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<jsp:root xmlns:jsp="http://java.sun.com/JSP/Page" 
+		  xmlns:ui="http://java.sun.com/jsf/facelets"
+  		  xmlns:h="http://java.sun.com/jsf/html"
+		  xmlns:f="http://java.sun.com/jsf/core" 
+		  version="2.0">
+<ui:composition template="/template.jspx">
+	<ui:define name="body">
+		<h:outputText id="headingOutTxt" value="#{msg.checkout_txt_heading}"
+			styleClass="headingOutputText" />
+		<p><h:outputText id="headingDetailOutTxt"
+			styleClass="headingOutputText" value="#{msg.checkout_txt_detail}" /></p>
+		<h:form id="checkoutFrm">
+			<h:dataTable id="basketTbl" var="basketItem" styleClass="dataTable"
+				columnClasses="dataTableCol1" rowClasses="dataTableRow1"
+				headerClass="dataTableHeader"
+				value="#{shoppingViewHelper.basket.basketItems}">
+				<h:column id="nameCol">
+					<f:facet name="header">
+						<h:outputText id="nameHeaderOutTxt"
+							value="#{msg.checkout_txt_name_col_header}" />
+					</f:facet>
+					<h:outputText id="nameOutTxt" value="#{basketItem.item.name}" />
+				</h:column>
+				<h:column id="descriptionCol">
+					<f:facet name="header">
+						<h:outputText id="descriptionHeaderOutTxt"
+							value="#{msg.checkout_txt_description_col_header}" />
+					</f:facet>
+					<h:outputText id="descriptionOutTxt"
+						value="#{basketItem.item.description}" />
+				</h:column>
+				<h:column id="quantityCol">
+					<f:facet name="header">
+						<h:outputText id="quantityHeaderOutTxt"
+							value="#{msg.checkout_txt_quantity_col_header}" />
+					</f:facet>
+					<h:outputText id="quantityOutTxt" value="#{basketItem.quantity}" />
+				</h:column>
+				<h:column id="priceCol">
+					<f:facet name="header">
+						<h:outputText id="priceHeaderOutTxt"
+							value="#{msg.checkout_txt_price_col_header}" />
+					</f:facet>
+					<h:outputText id="priceOutTxt" value="#{basketItem.price}">
+						<f:convertNumber pattern="#{msg.currency_pattern}" />
+					</h:outputText>
+				</h:column>
+			</h:dataTable>
+			<h:panelGrid id="totalPnlGrid" columns="2">
+				<h:outputText id="totalOutTxt" value="#{msg.checkout_txt_total}"
+					styleClass="headingOutputText" />
+				<h:outputText id="totalResultOutTxt" value="#{pc_Checkout.total}"
+					styleClass="headingOutputText">
+					<f:convertNumber pattern="#{msg.currency_pattern}" />
+				</h:outputText>
+			</h:panelGrid>
+			<h:messages id="processPaymentMsg" />
+			<h:commandButton id="processPaymentBtn" value="#{msg.btn_pay}"
+				action="#{pc_Checkout.processPayment}" />
+			<h:commandButton id="cancelBtn" value="#{msg.btn_cancel}"
+				action="#{pc_Checkout.cancelOrder}"
+				onclick="return confirm('This will cancel your order, are you sure you want to proceed?');" />
+		</h:form>
+	</ui:define>
+</ui:composition>
+</jsp:root>

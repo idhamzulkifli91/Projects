@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:" SHAPE="240,33,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules::0" NAME="item" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="checkout::#checkout.jspx" NAME="output"
+    PATH="/checkout.jspx" TARGET="rules:#checkout.jspx" TITLE="checkout" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="pay::#payment-processed.jspx" NAME="output1"
+    PATH="/payment-processed.jspx"
+    TARGET="rules:#payment-processed.jspx" TITLE="pay" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="cancel::#items.jspx" NAME="output2"
+    PATH="/items.jspx" TARGET="rules:#items.jspx" TITLE="cancel" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="continue::#items.jspx" NAME="output3"
+    PATH="/items.jspx" TARGET="rules:#items.jspx" TITLE="continue" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#payment-processed.jspx"
+  PATH="/payment-processed.jspx" SHAPE="496,225,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#items.jspx" PATH="/items.jspx"
+  SHAPE="496,225,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#checkout.jspx" PATH="/checkout.jspx"
+  SHAPE="496,17,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
