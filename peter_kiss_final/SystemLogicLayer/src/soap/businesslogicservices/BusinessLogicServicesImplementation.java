@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -138,10 +139,16 @@ public class BusinessLogicServicesImplementation implements
 //	System.out.println(d);
 //	if(d.compareTo(from)>=0&&d.compareTo(to)<=0)
 //		result.add(m);
+	
+	public static long getDateDiffInDays(Date date1, Date date2, TimeUnit timeUnit) {
+	    long diffInMillies = date2.getTime() - date1.getTime();
+	    return timeUnit.convert(diffInMillies,TimeUnit.DAYS);
+	}
+	
 	@Override
 	public String getProgressInfo(int userdata) throws MalformedURLException {
 		initConnection();
-		String answer="",fulfilledGoals="Goals you have reached:",failedGoals="Goals you haven't reached:",onGoodWayGoals="Goals,which you are on good way to reach:", moreEffortGoals="Goals,which need more efforts to reach:"  ;
+		String answer="",fulfilledGoals="Goals you have reached:",failedGoals="Goals you haven't reached:",onGoodWayGoals="Goals,which you are on good way to reach:", moreEffortGoals="Goals,which need more efforts to reach:"  ,NotEoughInfo="There is no information enough to count progress:";
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		List<Measure> ml = dataservice.readPersonMeasures(userdata);
@@ -151,6 +158,7 @@ public class BusinessLogicServicesImplementation implements
 			
 			if(g.getMeasureType().getCountingMethod().getDescription().equals("value"))
 			{
+				//git
 				try {
 					Measure firstInTerm=null, lastInTerm=null;
 					Date firstMeasureDate=null,lastMeasureDate=null;
@@ -159,6 +167,7 @@ public class BusinessLogicServicesImplementation implements
 					cal.setTime(startdate);
 					cal.add(Calendar.DATE, g.getTerm()); //
 					Date endDate = cal.getTime();
+					System.out.println("Value - Interval: "+g.getDate()+" + "+g.getTerm()+" -> "+endDate);
 					Calendar calact = Calendar.getInstance();		
 					Date actDate = calact.getTime();					
 					for(Measure m : ml)
@@ -167,18 +176,18 @@ public class BusinessLogicServicesImplementation implements
 						if(m.getMeasureType().getDescription().equals(g.getMeasureType().getDescription())&&
 								measureDate.compareTo(startdate)>=0&&measureDate.compareTo(endDate)<=0)
 						{
-							if(firstInTerm==null||firstMeasureDate.compareTo(measureDate)<0){
+							if(firstInTerm==null||measureDate.compareTo(firstMeasureDate)<0){
 								firstInTerm = m;
 								firstMeasureDate = measureDate ;
 							}
-							if(lastInTerm==null||lastMeasureDate.compareTo(measureDate)>0){
+							if(lastInTerm==null||measureDate.compareTo(lastMeasureDate)>0){
 								lastInTerm = m;
 								lastMeasureDate = measureDate ;
 							}
 						}
 					}
-					double diffPerDay = (lastInTerm.getValue()-firstInTerm.getValue())/lastMeasureDate.compareTo(firstMeasureDate);
-					double predictedValue = firstInTerm.getValue() + diffPerDay	* endDate.compareTo(firstMeasureDate);
+					double diffPerDay = (lastInTerm.getValue()-firstInTerm.getValue())/getDateDiffInDays(firstMeasureDate, lastMeasureDate, TimeUnit.MINUTES);//lastMeasureDate.compareTo(firstMeasureDate);
+					double predictedValue = firstInTerm.getValue() + diffPerDay	*getDateDiffInDays(firstMeasureDate, endDate, TimeUnit.MINUTES);
 					if((g.getMoreOrLess()>0&& predictedValue>g.getValue())||(g.getMoreOrLess()<0&& predictedValue<g.getValue()))
 					{//OK
 						if(endDate.compareTo(actDate)>0){
@@ -186,16 +195,24 @@ public class BusinessLogicServicesImplementation implements
 							String endOfTerm ="";
 							if(g.getTermIsSolid()>0)
 								endOfTerm =" until "+ g.getEnddate();
-							fulfilledGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+							fulfilledGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm + " ==> last measurement in term: "+ lastInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+lastInTerm.getDate()+" )"; 
 							}
 						else{
 							String moreOrLess = (g.getMoreOrLess()>0?"more than":"less than");
 							String endOfTerm ="";
 							if(g.getTermIsSolid()>0)
 								endOfTerm =" until "+ g.getEnddate();
-							onGoodWayGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+							onGoodWayGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm + " ==> last measurement in term: "+ lastInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+lastInTerm.getDate()+" )"; 
 						}
 						
+					}
+					else if(lastMeasureDate.equals(firstMeasureDate))
+					{
+						String moreOrLess = (g.getMoreOrLess()>0?"more than":"less than");
+						String endOfTerm ="";
+						if(g.getTermIsSolid()>0)
+							endOfTerm =" until "+ g.getEnddate();
+						NotEoughInfo += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm + " ==> First Measurement in term"+firstInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+firstInTerm.getDate()+" )"+" last measurement in term: "+ lastInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+lastInTerm.getDate()+" )"; 
 					}
 					else
 					{//fail
@@ -204,7 +221,7 @@ public class BusinessLogicServicesImplementation implements
 							String endOfTerm ="";
 							if(g.getTermIsSolid()>0)
 								endOfTerm =" until "+ g.getEnddate();
-							failedGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+							failedGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm + " ==> last measurement in term: "+ lastInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+lastInTerm.getDate()+" )"; 
 							
 							}
 						else{
@@ -213,7 +230,7 @@ public class BusinessLogicServicesImplementation implements
 							String endOfTerm ="";
 							if(g.getTermIsSolid()>0)
 								endOfTerm =" until "+ g.getEnddate();
-							moreEffortGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+							moreEffortGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm + " ==> last measurement in term: "+ lastInTerm.getValue()+" "+lastInTerm.getMeasureType().getUnit()+" ( "+lastInTerm.getDate()+" )"; 
 							
 						}
 					}
@@ -238,24 +255,30 @@ public class BusinessLogicServicesImplementation implements
 					cal.setTime(sdf.parse(g.getEnddate()));
 					ended = true;
 				}
-				cal.add(Calendar.DATE, -g.getTerm()); //
-				startdate = cal.getTime();
-				
-					
 				
 				Date endDate = cal.getTime();
+				cal.add(Calendar.DATE, -g.getTerm()); //
+				startdate = cal.getTime();
+				System.out.println(g.getMeasureType().getDescription()+"SUM - Interval: "+" "+startdate+" + "+g.getTerm()+" -> "+endDate);
+					
 				
-				double sum=0;
+				
+				
+				double sum = 0;
 				for(Measure m : ml)
 				{
 					Date measureDate = sdf.parse(m.getDate());
-					if(m.getMeasureType().getDescription().equals(g.getMeasureType().getDescription())&&
-							measureDate.compareTo(startdate)>=0&&measureDate.compareTo(endDate)<=0)
-					{
-						sum+=m.getValue();
+					
+					if(m.getMeasureType().getDescription().equals(g.getMeasureType().getDescription())){
+						System.out.println(m.getMeasureType().getDescription()+" "+measureDate+" "+m.getValue());	
+						if(measureDate.compareTo(startdate)>=0&&measureDate.compareTo(endDate)<=0)
+						{
+							sum+=m.getValue();
+							System.out.println(m.getMeasureType().getDescription()+" "+m.getValue());
+						}
 					}
 				}
-				if(sum> g.getValue())
+				if((sum> g.getValue()&&g.getMoreOrLess()>0)||(sum< g.getValue()&&g.getMoreOrLess()<0))
 				{
 					if(ended)
 					{
@@ -263,7 +286,7 @@ public class BusinessLogicServicesImplementation implements
 						String endOfTerm ="";
 						if(g.getTermIsSolid()>0)
 							endOfTerm =" until "+ g.getEnddate();
-						fulfilledGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+						fulfilledGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm +" ==> "+g.getMeasureType().getUnit()+" in the last measured "+g.getTerm() +"days: "+sum ;
 						
 					}
 					else					
@@ -272,7 +295,7 @@ public class BusinessLogicServicesImplementation implements
 						String endOfTerm ="";
 						if(g.getTermIsSolid()>0)
 							endOfTerm =" until "+ g.getEnddate();
-						onGoodWayGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+						onGoodWayGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm+" ==> "+g.getMeasureType().getUnit()+" in the last measured"+g.getTerm() +"days: "+sum ;
 						
 					}
 				}
@@ -284,7 +307,7 @@ public class BusinessLogicServicesImplementation implements
 						String endOfTerm ="";
 						if(g.getTermIsSolid()>0)
 							endOfTerm =" until "+ g.getEnddate();
-						failedGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+						failedGoals += "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm+" ==> "+g.getMeasureType().getUnit()+" in the last measured"+g.getTerm() +"days: "+sum ;
 						
 					}
 					else					
@@ -293,7 +316,7 @@ public class BusinessLogicServicesImplementation implements
 						String endOfTerm ="";
 						if(g.getTermIsSolid()>0)
 							endOfTerm =" until "+ g.getEnddate();
-						moreEffortGoals+= "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm;
+						moreEffortGoals+= "#"+g.getDate()+" "+g.getMeasureType().getDescription()+" "+moreOrLess+" "+g.getValue()+" "+g.getMeasureType().getUnit()+" per "+g.getTerm()+" days"+endOfTerm+" ==> "+g.getMeasureType().getUnit()+" in the last measured"+g.getTerm() +"days: "+sum ;
 						
 					}
 				}
@@ -308,7 +331,7 @@ public class BusinessLogicServicesImplementation implements
 			
 		}
 			
-		return fulfilledGoals + "#" + failedGoals + "#"+onGoodWayGoals+"#"+moreEffortGoals;
+		return fulfilledGoals + "#" + failedGoals + "#"+onGoodWayGoals+"#"+moreEffortGoals + "#" +NotEoughInfo;
 	}
 	
 	 public int addNewMeasurmentType( String measurmentDescription)
