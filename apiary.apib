@@ -227,23 +227,3 @@ soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
 
 
 
-
-## Note [/notes/{id}]
-A single Note object with all its details
-
-+ Parameters
-    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
-
-### Retrieve a Note [GET]
-+ Response 200 (application/json)
-
-    + Header
-
-            X-My-Header: The Value
-
-    + Body
-
-            { "id": 2, "title": "Pick-up posters from post-office" }
-
-### Remove a Note [DELETE]
-+ Response 204
