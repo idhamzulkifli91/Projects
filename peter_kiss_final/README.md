@@ -21,6 +21,7 @@ User interface:
 The user interface is a basic console-application where you can give commands similar to human language 
 for the System logic layer to use the granted functions. 
 
+<a href=https://github.com/peterkiss/Projects/blob/master/apiary.apib>Apiary doc<a> 
 
 To set up service:
 ==================
