@@ -21,7 +21,7 @@ User interface:
 The user interface is a basic console-application where you can give commands similar to human language 
 for the System logic layer to use the granted functions. 
 
-<a href=https://github.com/peterkiss/Projects/blob/master/apiary.apib>Apiary doc<a> 
+<a href=https://app.apiary.io/sdefinalproject/editor>Apiary doc<a> 
 
 To set up service:
 ==================
@@ -42,25 +42,31 @@ Try services:
 To try service type the following commands line by line (except in brackets):
 
 (sign up)
+
 	create user Chuck Norris
 
 
 (login)
+
 	login John Doe
 
 (Set new goal:)
+
 	goals
 	goal height more than 180 cm per 20 days 2015-02-08
 	goals
 
 (add new measure:)
+
 	measurements
 	measurement height 175 cm 2015-02-09
 	measurement height 176 cm 2015-02-10
 	measurements
 
 (check out the progress:)
+
 	progress
 
 (get a random quote:)
+
 	quote
