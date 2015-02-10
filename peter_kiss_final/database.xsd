@@ -1,0 +1,73 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="people">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="person" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="goals" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:date" name="date"/>
+                    <xs:element type="xs:date" name="enddate" minOccurs="0"/>
+                    <xs:element type="xs:short" name="goalId"/>
+                    <xs:element name="measureType">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="countingMethod">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="countingMethodId"/>
+                                <xs:element type="xs:string" name="description"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="description"/>
+                          <xs:element type="xs:short" name="measureTypeId"/>
+                          <xs:element type="xs:string" name="unit"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:byte" name="moreOrLess"/>
+                    <xs:element type="xs:byte" name="term"/>
+                    <xs:element type="xs:byte" name="termIsSolid"/>
+                    <xs:element type="xs:float" name="value"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="measures" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element type="xs:date" name="date"/>
+                    <xs:element type="xs:byte" name="measureId"/>
+                    <xs:element name="measureType">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="countingMethod">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element type="xs:byte" name="countingMethodId"/>
+                                <xs:element type="xs:string" name="description"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                          <xs:element type="xs:string" name="description"/>
+                          <xs:element type="xs:short" name="measureTypeId"/>
+                          <xs:element type="xs:string" name="unit"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                    <xs:element type="xs:float" name="value"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:byte" name="personId"/>
+              <xs:element type="xs:string" name="surname"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
