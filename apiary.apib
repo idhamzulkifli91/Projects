@@ -1,0 +1,249 @@
+FORMAT: 1A
+
+# IntroSDE final
+I've implemented a basic LifeCoach service. With this service you can register Users, and after login
+You can set up goals you want to reach, register measures relating to your goals and track your progress.
+You can get some cheering-up quotes as well if you want.
+
+# Group Notes
+Notes related resources of the **LifeCoach API** (http://localhost:451/ws/processcentricservice)
+
+##LifeCoach []
+
+### Login [POST]
++ Request (text/xml)
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+        <soap:Body xmlns:m="http://processcentricservices.soap/">
+                <m:login>
+                        <userdata>
+                                login John Doe
+                        </userdata>
+                </m:login>
+        </soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+ 
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:loginResponse xmlns:ns2="http://processcentricservices.soap/">
+                <login>1</login>
+            </ns2:loginResponse>
+        </S:Body>
+    </S:Envelope>
+
+### Register [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:register>
+    <userdata>register user Peter Kiss</userdata>
+  </m:register>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+ 
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:registerResponse xmlns:ns2="http://processcentricservices.soap/">
+                <register>0</register>
+         </ns2:registerResponse>
+        </S:Body>
+    </S:Envelope>
+
+### Register goal [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:registerGoal>
+    <id>1</id>
+    <arg1>goal height more than 180 cm per 20 days 2015-02-08</arg1>
+  </m:registerGoal>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+ 
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:registerGoalResponse xmlns:ns2="http://processcentricservices.soap/"/>
+        </S:Body>
+    </S:Envelope>
+
+### Register measurement [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:registerMeasurment>
+    <id>1</id>
+    <arg1>measurement height 175 cm 2015-02-09</arg1>
+  </m:registerMeasurment>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:registerMeasurmentResponse xmlns:ns2="http://processcentricservices.soap/"/>
+        </S:Body>
+    </S:Envelope>
+
+### Get progress info [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:getProgressInfo>
+    <id>1</id>
+  </m:getProgressInfo>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:getProgressInfoResponse xmlns:ns2="http://processcentricservices.soap/">
+                <getProgressInfo>Goals you have reached:#2015-01-26 weight less than 75.0 kg per 31 days until 2015-02-26 ==&gt; last measurement in term: 76.0 kg ( 2015-02-06 )#2015-02-08 height more than 180.0 cm per 20 days ==&gt; last measurement in term: 176.0 cm ( 2015-02-10 )#Goals you haven't reached:#Goals,which you are on good way to reach:#2015-01-26 eat less than 3000.0 calorie per 1 days ==&gt; calorie in the last measured1days: 0.0#Goals,which need more efforts to reach:#2015-01-26 step more than 8000.0 x per 7 days ==&gt; x in the last measured7days: 5100.0#There is no information enough to count progress:#2015-02-10 height more than 180.0 cm per 20 days ==&gt; First Measurement in term176.0 cm ( 2015-02-10 ) last measurement in term: 176.0 cm ( 2015-02-10 )#2015-02-10 height more than 180.0 cm per 20 days ==&gt; First Measurement in term176.0 cm ( 2015-02-10 ) last measurement in term: 176.0 cm ( 2015-02-10 )</getProgressInfo>
+            </ns2:getProgressInfoResponse>
+        </S:Body>
+    </S:Envelope>
+
+
+### Get random quote [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:getQuote>
+  </m:getQuote>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:getQuoteResponse xmlns:ns2="http://processcentricservices.soap/">
+                <getQuote>economist, n:
+    Someone who's good with figures, but doesn't have enough
+    personality to become an accountant.
+     
+    [fortune] http://iheartquotes.com/fortune/show/45444
+                </getQuote>
+            </ns2:getQuoteResponse>
+        </S:Body>
+    </S:Envelope>
+
+### Register measurement [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:getGoals>
+    <id>1</id>
+  </m:getGoals>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:getGoalsResponse xmlns:ns2="http://processcentricservices.soap/">
+                <goals>2015-01-26 step more than 8000.0 x per 7 days#2015-01-26 weight less than 75.0 kg per 31 days until 2015-02-26#2015-01-26 eat less than 3000.0 calorie per 1 days#2015-02-08 height more than 180.0 cm per 20 days#2015-02-10 height more than 180.0 cm per 20 days#2015-02-10 height more than 180.0 cm per 20 days#</goals>
+            </ns2:getGoalsResponse>
+        </S:Body>
+    </S:Envelope>
+
+
+### Register measurement [POST]
++ Request (text/xml)
+
+<soap:Envelope
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+  <soap:Body xmlns:m="http://processcentricservices.soap/">
+  <m:getMeasures>
+    <id>1</id>
+  </m:getMeasures>
+</soap:Body>
+</soap:Envelope>
+
++ Response 200 (text/xml)
+
+
+
+<?xml version="1.0" ?>
+    <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+        <S:Body>
+            <ns2:getMeasuresResponse xmlns:ns2="http://processcentricservices.soap/">
+                <getMeasures>2015-01-27 step 2000.0 x#2015-01-28 step 1500.0 x#2015-01-29 step 3500.0 x#2015-01-27 weight 81.0 kg#2015-02-03 weight 79.0 kg#2015-01-27 eat 3500.0 calorie#2015-01-28 eat 2000.0 calorie#2015-01-29 eat 2079.0 calorie#2015-02-04 step 1000.0 x#2015-02-06 weight 76.0 kg#2015-02-06 eat 2900.0 calorie#2015-02-05 eat 2800.0 calorie#2015-02-05 weight 76.0 kg#2015-02-05 step 2000.0 x#2015-02-06 step 2100.0 x#2015-02-06 eat 2200.0 calorie#2015-02-09 height 175.0 cm#2015-02-10 height 176.0 cm#2015-02-09 height 175.0 cm#</getMeasures>
+            </ns2:getMeasuresResponse>
+        </S:Body>
+    </S:Envelope>
+
+
+
+
+## Note [/notes/{id}]
+A single Note object with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
+
+### Retrieve a Note [GET]
++ Response 200 (application/json)
+
+    + Header
+
+            X-My-Header: The Value
+
+    + Body
+
+            { "id": 2, "title": "Pick-up posters from post-office" }
+
+### Remove a Note [DELETE]
++ Response 204
